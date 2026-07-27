@@ -44,15 +44,27 @@ namespace Api
             });
             builder.Services.AddScoped<IApplicationContext, ApplicationContext>();
 
+            // dodanie polityki cors
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(policy =>
+                {
+                    policy.AllowAnyMethod()
+                          .AllowAnyHeader()
+                          .WithMethods("GET")
+                               .WithOrigins("http://localhost:55600") //zmieniæ przy buildzie na serwer
+                          .AllowCredentials();
+                });
+            });
 
             var app = builder.Build();
+            app.UseCors();
 
-           
             //if (app.Environment.IsDevelopment())
             //{
-             
 
-                app.UseSwagger();
+
+            app.UseSwagger();
                 app.UseSwaggerUI();
                 app.MapSwagger();
             //}

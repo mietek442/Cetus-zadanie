@@ -28,7 +28,6 @@
 
   <ItemGroup>
     <Folder Include="Features\Common\" />
-    <Folder Include="Features\Desks\Queries\" />
   </ItemGroup>
 
 </Project>
