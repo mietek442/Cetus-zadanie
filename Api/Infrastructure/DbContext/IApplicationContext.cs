@@ -6,6 +6,7 @@ namespace Api.Infrastructure.DbContext
     public interface IApplicationContext
     {
         public DbSet<Desk> Desks { get; set; }
+        public DbSet<Reservation> Reservations { get; set; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }
