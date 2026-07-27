@@ -1,6 +1,6 @@
 ﻿namespace Api.Shared.Enums
 {
-    public class ReservationStatusEnum
+    public enum ReservationStatusEnum
     {
         Pending,
         Confirmed,
