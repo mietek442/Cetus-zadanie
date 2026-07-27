@@ -84,7 +84,7 @@ Przed wykonaniem migracji należy upewnić się, że connection string w pliku `
 Po zakończeniu procesu migracji należy przywrócić właściwą konfigurację połączenia z bazą danych.
 
 
-# Docker Guid in English:
+
 
 # Docker Poradnik po polsku:
 
@@ -119,7 +119,7 @@ Opis:
 - `1.0` - wersja obrazu.
 
 
-# Opcjonalne kroki
+#Docker hub i umieszczenie plików
 
 Do wykonania poniższych operacji wymagane jest konto Docker Hub.
 
@@ -202,59 +202,9 @@ docker ps
 - Wyświetla listę aktywnych kontenerów wraz z ich identyfikatorem, nazwą obrazu oraz statusem działania.
 
 
-# Zaawansowane techniki Dockera
 
 
-Automatyczne usunięcie kontenera:
 
-
-```docker command
-docker run --rm
-```
-
-
-- Parametr `--rm` powoduje automatyczne usunięcie kontenera po jego zatrzymaniu.
-
-
-Uruchomienie kontenera w trybie tylko do odczytu:
-
-
-```docker command
-docker run --read-only my_image
-```
-
-
-- Parametr `--read-only` blokuje możliwość modyfikowania systemu plików kontenera.
-
-
-# Ograniczenie zasobów kontenera:
-
-
-```docker command
-docker run --memory="150m" --cpus="0.2"
-```
-
-
-Opis:
-
-- `--memory="150m"` - ogranicza wykorzystanie pamięci RAM do 150 MB.
-- `--cpus="0.2"` - ogranicza wykorzystanie procesora do 20% jednego rdzenia.
-
-
-# DockerFile
-
-
-Przykład wykorzystania użytkownika aplikacji:
-
-
-```docker file command
-USER app
-```
-
-
-Instrukcja `USER app` powoduje uruchomienie aplikacji z wykorzystaniem ograniczonego użytkownika zamiast konta root.
-
-Pozwala to zwiększyć bezpieczeństwo aplikacji poprzez ograniczenie możliwości wykonywania nieautoryzowanych operacji.
 
 
 
