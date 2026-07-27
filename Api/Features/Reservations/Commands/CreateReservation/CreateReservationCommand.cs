@@ -27,22 +27,55 @@
             CancellationToken cancellationToken)
         {
             var desk = await _context.Desks
-                .FirstAsync(
+                .FirstOrDefaultAsync(
                     d => d.Id == request.ReservationRequest.DeskId,
                     cancellationToken);
 
+            if (desk == null)
+            {
+                return new NotFoundObjectResult(new
+                {
+                    Message = "Desk not found."
+                });
+            }
+
+            if (!desk.IsAvailable)
+            {
+                return new BadRequestObjectResult(new
+                {
+                    Message = "Desk reserved."
+                });
+            }
+
+
             var reservation = new Reservation
             {
+                Id = Guid.NewGuid(),
+
+                
+                UserId = request.ReservationRequest.UserId,
+
                 DeskId = desk.Id,
                 Desk = desk,
+
                 StartDateTime = request.ReservationRequest.StartDateTime,
                 EndDateTime = request.ReservationRequest.EndDateTime,
+
                 Status = ReservationStatusEnum.Pending,
+
                 CreatedAt = DateTime.UtcNow
             };
 
-            await _context.Reservations.AddAsync(reservation, cancellationToken);
+
+            desk.IsAvailable = true;
+
+
+            await _context.Reservations.AddAsync(
+                reservation,
+                cancellationToken);
+
             await _context.SaveChangesAsync(cancellationToken);
+
 
             var result = new CreateReservationResult
             {
@@ -54,6 +87,7 @@
                 CreatedAt = reservation.CreatedAt,
                 Desk = desk
             };
+
 
             return new OkObjectResult(result);
         }
