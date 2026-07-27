@@ -1,5 +1,7 @@
 using Api.Features.Desks.Commands.CreateDesk;
 using Api.Infrastructure.DbContext;
+using Api.Infrastructure.Integrations.Deepseek;
+using Deepseek.AspClient.Client;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
 using Microsoft.OpenApi.Models;
@@ -11,7 +13,9 @@ namespace Api
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+     
 
+            builder.Services.AddSingleton(new DeepseekClient("sk-ad49a7aa9283442fb581994778ab9f9c"));
 
             // dodanie ¿eby w swagger enum wyswietla³ siê jako nazwa a nie jako 1,2,3
             builder.Services.AddControllers().AddJsonOptions(option =>
@@ -28,6 +32,8 @@ namespace Api
                 cfg.RegisterServicesFromAssemblyContaining<CreateDeskCommand>();
             });
 
+
+            builder.Services.AddScoped<IDeepseekService, DeepseekService>();
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(option =>
@@ -56,6 +62,12 @@ namespace Api
                           .AllowCredentials();
                 });
             });
+
+
+            //deepsek Ai  Deepseek:ApiKey
+
+            //var deepseekApiKey = builder.Configuration.GetValue<string>("Deepseek:ApiKey");
+           
 
             var app = builder.Build();
             app.UseCors();
