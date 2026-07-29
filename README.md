@@ -12,9 +12,9 @@ Aplikacja zarządzania stanowiskami biurowymi oraz procesem ich rezerwacji. Syst
 
 Celem projektu jest stworzenie kompletnego systemu rezerwacji stanowisk biurowych posiadającego wszystkie najważniejsze funkcjonalności wymagane do codziennego zarządzania przestrzenią pracy.
 
--Użycie dockera, oraz umieszczenie aplikacji na serwerze 
--Integracja z Api Deepseek jako agent Ai
--Wysyłanie Maili przez smtp (mail na którym stoi aplikacja) 
+- Użycie dockera, oraz umieszczenie aplikacji na serwerze 
+- Integracja z Api Deepseek jako agent Ai
+- Wysyłanie Maili przez smtp (mail na którym stoi aplikacja) 
 
 
 
