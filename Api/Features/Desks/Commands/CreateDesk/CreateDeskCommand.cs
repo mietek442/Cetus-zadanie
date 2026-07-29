@@ -1,43 +1,43 @@
-﻿using Api.Domain.Models;
-using Api.Infrastructure.DbContext;
+﻿    using Api.Domain.Models;
+    using Api.Infrastructure.DbContext;
 
-//using Api.Infrastructure.DbContext;
-using MediatR;
-using Microsoft.AspNetCore.Mvc;
+    //using Api.Infrastructure.DbContext;
+    using MediatR;
+    using Microsoft.AspNetCore.Mvc;
 
-namespace Api.Features.Desks.Commands.CreateDesk
-{
-    public class CreateDeskCommand : IRequest<ActionResult<Desk>>
+    namespace Api.Features.Desks.Commands.CreateDesk
     {
-        public CreateDeskRequest DeskRequest { get; set; }
-    }
-
-    public class CreateDeskCommandHandler : IRequestHandler<CreateDeskCommand, ActionResult<Desk>>
-    {
-        private readonly IApplicationContext _context;
-
-        public CreateDeskCommandHandler(IApplicationContext context)
+        public class CreateDeskCommand : IRequest<ActionResult<Desk>>
         {
-            _context = context;
+            public CreateDeskRequest DeskRequest { get; set; }
         }
 
-        public async Task<ActionResult<Desk>> Handle(CreateDeskCommand request, CancellationToken cancellationToken)
+        public class CreateDeskCommandHandler : IRequestHandler<CreateDeskCommand, ActionResult<Desk>>
         {
-            var desk = new Desk
+            private readonly IApplicationContext _context;
+
+            public CreateDeskCommandHandler(IApplicationContext context)
             {
-                Id = Guid.NewGuid(),
-                Name = request.DeskRequest.Name,
-                Description = request.DeskRequest.Description,
-                PricePerHour = request.DeskRequest.PricePerHour,
-                IsAvailable = true,
-                CreatedAt = DateTime.UtcNow
-            };
+                _context = context;
+            }
 
-            _context.Desks.Add(desk);
+            public async Task<ActionResult<Desk>> Handle(CreateDeskCommand request, CancellationToken cancellationToken)
+            {
+                var desk = new Desk
+                {
+                    Id = Guid.NewGuid(),
+                    Name = request.DeskRequest.Name,
+                    Description = request.DeskRequest.Description,
+                    PricePerHour = request.DeskRequest.PricePerHour,
+                    IsAvailable = true,
+                    CreatedAt = DateTime.UtcNow
+                };
 
-            await _context.SaveChangesAsync(cancellationToken);
+                _context.Desks.Add(desk);
 
-            return new OkObjectResult(desk);
+                await _context.SaveChangesAsync(cancellationToken);
+
+                return new OkObjectResult(desk);
+            }
         }
     }
-}

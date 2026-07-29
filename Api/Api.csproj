@@ -10,9 +10,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Features\Common\**" />
+    <Content Remove="Features\Common\**" />
+    <EmbeddedResource Remove="Features\Common\**" />
+    <None Remove="Features\Common\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Ardalis.ApiEndpoints" Version="4.1.0" />
     <PackageReference Include="DeepSeek" Version="1.0.1" />
     <PackageReference Include="Deepseek.AspClient" Version="1.0.0" />
+    <PackageReference Include="FluentValidation" Version="11.10.0" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.10.0" />
     <PackageReference Include="MediatR" Version="14.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.18" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.18" />
@@ -26,10 +35,6 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="9.0.6" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Features\Common\" />
   </ItemGroup>
 
 </Project>

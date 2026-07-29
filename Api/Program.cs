@@ -1,11 +1,15 @@
 using Api.Features.Desks.Commands.CreateDesk;
 using Api.Infrastructure.DbContext;
 using Api.Infrastructure.Integrations.Deepseek;
+using Api.Shared.Behaviors;
+using Api.Shared.Exceptions;
 using Deepseek.AspClient.Client;
+using FluentValidation;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi;
 using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
+
 namespace Api
 {
     public class Program
@@ -13,73 +17,93 @@ namespace Api
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-     
 
-            builder.Services.AddSingleton(new DeepseekClient("sk-ad49a7aa9283442fb581994778ab9f9c"));
+            builder.Services.AddSingleton(
+                new DeepseekClient("TWÓJ_KLUCZ"));
 
-            // dodanie ¿eby w swagger enum wyswietla³ siê jako nazwa a nie jako 1,2,3
-            builder.Services.AddControllers().AddJsonOptions(option =>
-            {
+            // Controllers + Enum jako string w Swagger/JSON
+            builder.Services.AddControllers()
+                .AddJsonOptions(option =>
+                {
+                    option.JsonSerializerOptions.ReferenceHandler =
+                        ReferenceHandler.IgnoreCycles;
 
-                option.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-                option.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-            }
-);
+                    option.JsonSerializerOptions.Converters.Add(
+                        new JsonStringEnumConverter());
+                });
 
-
+            // MediatR
             builder.Services.AddMediatR(cfg =>
             {
                 cfg.RegisterServicesFromAssemblyContaining<CreateDeskCommand>();
             });
 
+            // FluentValidation
+            builder.Services.AddValidatorsFromAssemblyContaining<CreateDeskValidator>();
 
+            // MediatR Validation Pipeline
+            builder.Services.AddTransient(
+                typeof(IPipelineBehavior<,>),
+                typeof(ValidationBehavior<,>));
+
+            // Deepseek
             builder.Services.AddScoped<IDeepseekService, DeepseekService>();
 
+            // Swagger
             builder.Services.AddEndpointsApiExplorer();
+
             builder.Services.AddSwaggerGen(option =>
             {
                 option.SupportNonNullableReferenceTypes();
-                option.SwaggerDoc("v1", new OpenApiInfo { Title = "Zadanie Cetus Pro", Version = "v1" });
 
+                option.SwaggerDoc("v1",
+                    new OpenApiInfo
+                    {
+                        Title = "Zadanie Cetus Pro",
+                        Version = "v1"
+                    });
 
                 option.EnableAnnotations();
             });
+
+            // Database
             builder.Services.AddDbContext<ApplicationContext>(options =>
             {
-                options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+                options.UseNpgsql(
+                    builder.Configuration.GetConnectionString("DefaultConnection"));
             });
+
             builder.Services.AddScoped<IApplicationContext, ApplicationContext>();
 
-            // dodanie polityki cors
+            // CORS
             builder.Services.AddCors(options =>
             {
                 options.AddDefaultPolicy(policy =>
                 {
-                    policy.AllowAnyMethod()
-                          .AllowAnyHeader()
-                          .WithMethods("GET")
-                               .WithOrigins("http://localhost:55600") //zmieniæ przy buildzie na serwer
-                          .AllowCredentials();
+                    policy
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .WithOrigins("http://localhost:51868")
+                        .AllowCredentials();
                 });
             });
 
 
-            //deepsek Ai  Deepseek:ApiKey
-
-            //var deepseekApiKey = builder.Configuration.GetValue<string>("Deepseek:ApiKey");
-           
-
             var app = builder.Build();
+
+
+            // Obs³uga ValidationException
+            app.UseMiddleware<ValidationExceptionHandler>();
+
+
             app.UseCors();
 
-            //if (app.Environment.IsDevelopment())
-            //{
 
-
+            // Swagger
             app.UseSwagger();
-                app.UseSwaggerUI();
-                app.MapSwagger();
-            //}
+            app.UseSwaggerUI();
+            app.MapSwagger();
+
 
             app.UseHttpsRedirection();
 
