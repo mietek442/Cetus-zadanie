@@ -7,10 +7,16 @@ Zadanie Rekrutacyjne
 [Przejdź do dokumentacji aplikacji](https://cetuspro.jakubchrzastek.pl/swagger/index.html)
 
 
-
+# Założenia
 Aplikacja zarządzania stanowiskami biurowymi oraz procesem ich rezerwacji. System umożliwia pełną obsługę stanowisk pracy, zarządzanie rezerwacjami oraz wykorzystuje agenta AI do inteligentnego dopasowania stanowiska na podstawie preferencji użytkownika.
 
 Celem projektu jest stworzenie kompletnego systemu rezerwacji stanowisk biurowych posiadającego wszystkie najważniejsze funkcjonalności wymagane do codziennego zarządzania przestrzenią pracy.
+
+-Użycie dockera, oraz umieszczenie aplikacji na serwerze 
+-Integracja z Api Deepseek jako agent Ai
+-Wysyłanie Maili przez smtp (mail na którym stoi aplikacja) 
+
+
 
 
 ## Technologies Used
@@ -18,10 +24,10 @@ Celem projektu jest stworzenie kompletnego systemu rezerwacji stanowisk biurowyc
 - CQRS ✔️
 - Vertical Architecture ✔️
 - Dotnet Entity Framework Core ✔️
-- ASP.NET Core Identity in .NET 8 ✔️
-- Fluent Validator ✔️
+- ASP.NET Core Identity in .NET 9 ✔️
+- Fluent Validator  (w tworzeniu biurek)✔️
 - Docker ✔️
-- AI Agent for workstation recommendation ✔️
+- AI Agent for workstation recommendation (aktualnie problemy z kluczem Api) ✔️
 
 
 # Main Functionalities
@@ -69,7 +75,15 @@ Funkcjonalność umożliwia:
 - **AI Agent**: Find workstation based on user preferences
 
 
-# How to Run
+# Ograniczenia aplikacji:
+-Walidacja tylko w CreateDesk, w reszcie jest do zrobienia
+-Brak użytkowników, trzeba wpisywać sztywno Id przy tworzeniu rezerwacji
+
+
+
+
+
+# Jak uruchomić, opcjonalne kroki z powodu takiego że migracje są z projektem i baza jest podpięta
 
 
 ```bash
@@ -82,26 +96,6 @@ dotnet ef database update
 Przed wykonaniem migracji należy upewnić się, że connection string w pliku `appsettings.json` wskazuje na odpowiednią bazę danych.
 
 Po zakończeniu procesu migracji należy przywrócić właściwą konfigurację połączenia z bazą danych.
-
-
-
-
-# Docker Poradnik po polsku:
-
-
-Logowanie dockera za pomocą komendy:
-
-```docker command
-docker login -u uzytkownik -p haslo
-```
-
-
-Wylogowanie się z dockera za pomocą komendy:
-
-```docker command
-docker logout
-```
-
 
 ## Budowanie dockera:
 
@@ -117,6 +111,43 @@ Opis:
 - `-t` - pozwala nadać nazwę oraz wersję obrazu.
 - `mietek442/cetus` - nazwa repozytorium według konwencji Docker Hub (`nazwa_użytkownika/nazwa_aplikacji`).
 - `1.0` - wersja obrazu.
+
+
+## Uruchomienie dockera:
+
+
+```docker command
+docker run -d -p 8808:8080 c429c59dae79
+```
+
+
+Opis:
+
+- `docker run` - uruchamia kontener Docker.
+- `-d` - uruchamia kontener w tle.
+- `-p` - odpowiada za mapowanie portów pomiędzy komputerem a kontenerem.
+- `8808` - port dostępny lokalnie na komputerze użytkownika.
+- `8080` - port aplikacji działającej wewnątrz kontenera.
+- `c429c59dae79` - identyfikator obrazu Docker.
+
+
+Pokazanie listy uruchomionych kontenerów:
+
+
+```docker command
+docker ps
+```
+
+
+- Wyświetla listę aktywnych kontenerów wraz z ich identyfikatorem, nazwą obrazu oraz statusem działania.
+
+
+
+
+
+
+
+# w przypadku chęci wrzucenia na serwer vps kroki aby aplikacja została umieszczona
 
 
 #Docker hub i umieszczenie plików
@@ -171,37 +202,6 @@ docker images
 
 
 - Wyświetla listę dostępnych obrazów Docker wraz z nazwą, tagiem oraz identyfikatorem.
-
-
-## Uruchomienie dockera:
-
-
-```docker command
-docker run -d -p 8808:8080 c429c59dae79
-```
-
-
-Opis:
-
-- `docker run` - uruchamia kontener Docker.
-- `-d` - uruchamia kontener w tle.
-- `-p` - odpowiada za mapowanie portów pomiędzy komputerem a kontenerem.
-- `8808` - port dostępny lokalnie na komputerze użytkownika.
-- `8080` - port aplikacji działającej wewnątrz kontenera.
-- `c429c59dae79` - identyfikator obrazu Docker.
-
-
-Pokazanie listy uruchomionych kontenerów:
-
-
-```docker command
-docker ps
-```
-
-
-- Wyświetla listę aktywnych kontenerów wraz z ich identyfikatorem, nazwą obrazu oraz statusem działania.
-
-
 
 
 
