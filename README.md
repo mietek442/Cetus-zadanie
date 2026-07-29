@@ -76,9 +76,9 @@ Funkcjonalność umożliwia:
 
 
 # Ograniczenia aplikacji:
--Walidacja tylko w CreateDesk, w reszcie jest do zrobienia
--Brak użytkowników, trzeba wpisywać sztywno Id przy tworzeniu rezerwacji
-
+- Walidacja tylko w CreateDesk, w reszcie jest do zrobienia
+- Brak użytkowników, trzeba wpisywać sztywno Id przy tworzeniu rezerwacji
+- Agent Ai ma do poprawienia promt, oraz klucz Api
 
 
 
@@ -209,5 +209,3 @@ docker images
 
 
 
-RUN dotnet build "./Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
-```
