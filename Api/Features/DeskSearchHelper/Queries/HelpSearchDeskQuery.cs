@@ -24,12 +24,11 @@ namespace Api.Features.DeskSearchHelper.Queries
             HelpSearchDeskQuery request,
             CancellationToken cancellationToken)
         {
+            var promt = " ";
 
-                {request.Text}
+             
 
-                """;
-
-            var response = await _deepseekService.GetDeepseekResponse(prompt);
+            var response = await _deepseekService.GetDeepseekResponse(promt);
 
             var result = new HelpSearchDeskResult
             {

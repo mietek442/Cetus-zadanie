@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Infrastructure.Integrations.Deepseek
 {
-    public class DeepseekService
+    public class DeepseekService:IDeepseekService
     {
         private readonly DeepseekClient _client;
 
