@@ -1,6 +1,8 @@
 ﻿using Api.Infrastructure.Integrations.Deepseek;
+using Api.Shared.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System.Xml.Linq;
 
 namespace Api.Features.DeskSearchHelper.Queries
 {
@@ -22,15 +24,9 @@ namespace Api.Features.DeskSearchHelper.Queries
             HelpSearchDeskQuery request,
             CancellationToken cancellationToken)
         {
-            var prompt = $"""
-                Na podstawie poniższego tekstu odpowiedz na pytanie:
-                "Jaki jest ulubiony kolor?"
 
-                Tekst:
                 {request.Text}
 
-                Jeżeli nie da się określić odpowiedzi, napisz:
-                "Nie można określić ulubionego koloru."
                 """;
 
             var response = await _deepseekService.GetDeepseekResponse(prompt);
@@ -45,3 +41,10 @@ namespace Api.Features.DeskSearchHelper.Queries
         }
     }
 }
+
+
+
+
+
+
+
